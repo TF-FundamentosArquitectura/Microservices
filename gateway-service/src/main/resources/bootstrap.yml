@@ -1,0 +1,24 @@
+server:
+  port: 8080  # Puerto donde se escucha el API Gateway
+
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: config-service
+          uri: lb://config-service  # Utiliza el nombre del microservicio registrado en Eureka
+          predicates:
+            - Path=/config/**  # Ruta que el Gateway escuchará para redirigir a config-service
+        - id: registry-service
+          uri: lb://registry-service
+          predicates:
+            - Path=/registry/**  # Ruta que el Gateway escuchará para redirigir a registry-service
+        - id: admin-service
+          uri: lb://admin-service
+          predicates:
+            - Path=/admin/**  # Ruta que el Gateway escuchará para redirigir a admin-service
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/  # URL del Eureka Server (Registry Service)
